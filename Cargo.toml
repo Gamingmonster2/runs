@@ -1,0 +1,9 @@
+[package]
+name = "apex-agency"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+leptos = { version = "0.6", features = ["csr"] }
+console_error_panic_hook = "0.1.7"
+wasm-bindgen = "0.2"
