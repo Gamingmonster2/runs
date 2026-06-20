@@ -1,0 +1,38 @@
+name: Deploy Leptos Wasm
+
+on:
+  push:
+    branches:
+      - main  # أو اسم الفرع الرئيسي لديك
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. تثبيت لغة Rust وتجهيز Wasm target
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      # 2. تثبيت أداة Trunk المترجمة للمشروع
+      - name: Install Trunk & WASM-bindgen
+        run: |
+          wget -qO- https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
+          mv trunk /usr/local/bin/
+
+      # 3. بناء وتجميع الكود إلى ملفات ثابتة
+      - name: Build WebAssembly Project
+        run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
+
+      # 4. نشر الملفات المنتجة تلقائياً إلى صفحة GitHub Pages الخاص بك
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist  # المجلد الناتج الذي يحتوي على الملفات الثابتة
+          branch: gh-pages
