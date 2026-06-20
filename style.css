@@ -1,0 +1,25 @@
+/* Clean minimalist stylesheet for Leptos application */
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+.leptos-canvas {
+    perspective: 1000px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+/* Red glow highlights */
+::selection {
+    background-color: #ff0000;
+    color: #000000;
+}
