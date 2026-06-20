@@ -56,7 +56,7 @@ fn App() -> impl IntoView {
                 <div class="footer-content">
                     <span>{"STATUS: ALL SYSTEMS OPERATIONAL"}</span>
                     <span class="pulse-dot">{"🔴"}</span>
-                    <span>{"© 2024 APEX_CORE INC."}</span>
+                    <span>{"© 2026 APEX_CORE INC."}</span>
                 </div>
             </footer>
         </div>
@@ -186,14 +186,6 @@ fn OperationsView() -> impl IntoView {
         }
     };
 
-    let remove_node = move |index: usize| {
-        set_nodes.update(|n| {
-            if n.len() > index {
-                n.remove(index);
-            }
-        });
-    };
-
     view! {
         <div class="fade-in">
             <section class="section-header">
@@ -222,11 +214,66 @@ fn OperationsView() -> impl IntoView {
                 </div>
             </div>
 
-            // Interactive Node Deployer
             <div class="box node-deployer-box">
                 <div class="box-header">
                     <h3>{"ACTIVE NETWORK MESH"}</h3>
                     <span class="box-tag">{move || format!("{} NODES ONLINE", nodes.get().len())}</span>
                 </div>
 
-                <form on:submit=add_node class="
+                <form on:submit=add_node class="node-form">
+                    <input 
+                        type="text" 
+                        placeholder="Enter Virtual Node Name..."
+                        prop:value=move || new_node_name.get()
+                        on:input=move |ev| set_new_node_name.set(event_target_value(&ev))
+                        class="node-input"
+                    />
+                    <button type="submit" class="node-submit-btn">{"DEPLOY NODE"}</button>
+                </form>
+
+                <ul class="node-list">
+                    {move || nodes.get().into_iter().map(|node| {
+                        view! {
+                            <li class="node-item">
+                                <span class="node-status-icon">{"🔷"}</span>
+                                <span class="node-name">{node}</span>
+                                <span class="node-latency">{"[ 12ms ]"}</span>
+                            </li>
+                        }
+                    }).collect_view()}
+                </ul>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn ContactsView() -> impl IntoView {
+    view! {
+        <div class="fade-in">
+            <section class="section-header">
+                <h2 class="section-title">{"CORE CONTACTS"}</h2>
+                <p class="section-subtitle">{"Connect directly with the security response unit or system architecture core."}</p>
+            </section>
+
+            <div class="box contact-box">
+                <h3>{"SECURE COMMUNICATIONS"}</h3>
+                <p>{"For high-priority industrial deployment or infrastructure inquiries, target our neural routing endpoints."}</p>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>{"SECURE EMAIL:"}</strong>
+                        <span>{"core@apex.io.com.ly"}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>{"HQ LOCATION:"}</strong>
+                        <span>{"Tripoli, Libya"}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+fn main() {
+    mount_to_body(|| view! { <App/> });
+}
